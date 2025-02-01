@@ -42,7 +42,7 @@ class _MainScreenState extends State<MainScreen> {
     const HomeScreen(),
     TransferScreen(),
     RedeemScreen(),
-    PartnersScreen(),
+    const PartnersScreen(),
   ];
 
   @override
