@@ -3,7 +3,7 @@ const express = require('express');
 const fs = require('fs');
 const connection = require('./connectMySql').connection;
 
-const balanceRouter = require('./routes/balance');
+const infoRouter = require('./routes/info');
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
     
 });
 
-app.use(balanceRouter);
+app.use(infoRouter);
 
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');

@@ -6,7 +6,14 @@ const router = express.Router();
 
 router.get('/api/customer/:id', (req, res) => {
     const customerId = req.params.id;
-    connection.query(`SELECT * FROM users WHERE id = ?`, [customerId], (err, rows) => {
+    
+    //check for sql injection
+    if (customerId.match(/[\s\W]/)) {
+        res.status(400).json({ error: 'Invalid customer ID' });
+        return;
+    }
+
+    connection.query(`SELECT * FROM users WHERE user_id = ?`, [customerId], (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
@@ -15,7 +22,7 @@ router.get('/api/customer/:id', (req, res) => {
             res.status(404).json({ error: 'Customer not found' });
             return;
         }
-        res.json({ balance: rows[0].balance });
+        res.json(rows[0]);
     });
 });
 
