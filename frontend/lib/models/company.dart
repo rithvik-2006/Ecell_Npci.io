@@ -1,9 +1,9 @@
 class Company {
   num company_id;
-  num points_earned;
-  num monthly_sales;
-  num reward_token_value;
-  num scaling_constant;
+  String points_earned;
+  String monthly_sales;
+  String reward_token_value;
+  String scaling_constant;
   String created_at;
   String updated_at;
   String image_path;

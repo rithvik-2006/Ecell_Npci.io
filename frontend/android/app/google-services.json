@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "337099447718",
+    "project_id": "npci-ecell",
+    "storage_bucket": "npci-ecell.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337099447718:android:28c2f384955c9144978367",
+        "android_client_info": {
+          "package_name": "com.chootabheem.frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337099447718-089kbgnitf39jmrqi4euu78bvjtet89h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chootabheem.frontend",
+            "certificate_hash": "fcac310dc835f6450f24b5e00e7fbfeae0bde9aa"
+          }
+        },
+        {
+          "client_id": "337099447718-0quv9bn93tc26id3c4cra60rm62n5bdf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4ZoJD7feFd2p_WnpRMBtMJJWJg8jHD9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "337099447718-0quv9bn93tc26id3c4cra60rm62n5bdf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

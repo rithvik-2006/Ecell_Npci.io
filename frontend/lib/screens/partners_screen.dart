@@ -1,10 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/models/company.dart';
-import 'package:frontend/widget/glassmorphic_card.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:frontend/services/api_service.dart';
+import 'package:frontend/widgets/bottom_navigation.dart';
+import 'package:frontend/widgets/glassmorphic_card.dart';
 
 class PartnersScreen extends StatefulWidget {
   const PartnersScreen({super.key});
@@ -24,17 +22,17 @@ class _PartnersScreenState extends State<PartnersScreen> {
   }
 
   Future<void> fetchPartners() async {
-    final response =
-        await http.get(Uri.parse('https://tqrxxx81-3000.inc1.devtunnels.ms/api/companies'));
+    setState(() {
+      isLoading = true;
+    });
 
-    log('data: ${response.body}');
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
+    try {
+      final List<Company> companies = await ApiService().fetchCompanies();
       setState(() {
-        partners = data.map((item) => Company.fromJson(item)).toList();
+        partners = companies;
         isLoading = false;
       });
-    } else {
+    } catch (e) {
       setState(() {
         isLoading = false;
       });
@@ -84,6 +82,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                 return _buildPartnerCard(context, partners[index]);
               },
             ),
+      bottomNavigationBar: const BottomNavigation(initialIndex: 3),
     );
   }
 
@@ -94,11 +93,11 @@ class _PartnersScreenState extends State<PartnersScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.network(
-              partner.image_path,
-              width: 80,
-              height: 80,
-            ),
+            // Image.network(
+            //   partner.image_path,
+            //   width: 80,
+            //   height: 80,
+            // ),
             const SizedBox(height: 16),
             Text(
               partner.name,

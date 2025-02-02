@@ -1,8 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widget/glassmorphic_card.dart';
+import 'package:frontend/widgets/bottom_navigation.dart';
+import 'package:frontend/widgets/glassmorphic_card.dart';
+import 'package:frontend/services/api_service.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  Map<String, dynamic>? userData;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final data = await ApiService().fetchCustomer();
+      setState(() {
+        userData = data;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      throw Exception('Failed to load user data');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,51 +69,55 @@ class HomeScreen extends StatelessWidget {
                 style: TextStyle(color: Colors.grey),
               ),
               const SizedBox(height: 24),
-              GlassmorphicCard(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Your Rewards Dashboard',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Total Points'),
-                          Text(
-                            '50,000',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor,
+              isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : GlassmorphicCard(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Your Rewards Dashboard',
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      LinearProgressIndicator(
-                        value: 0.7,
-                        backgroundColor: Colors.grey[800],
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Theme.of(context).primaryColor,
+                            const SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Total Points'),
+                                Text(
+                                  '${userData?['points'] ?? '0'}',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            LinearProgressIndicator(
+                              value: (userData?['progress'] ?? 0) / 100,
+                              backgroundColor: Colors.grey[800],
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                _buildPointsInfo(
+                                    'Available', '${userData?['available_points'] ?? '0'}'),
+                                _buildPointsInfo(
+                                    'Pending', '${userData?['pending_points'] ?? '0'}'),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _buildPointsInfo('Available', '35,000'),
-                          _buildPointsInfo('Pending', '15,000'),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
               const SizedBox(height: 24),
               GlassmorphicCard(
                 child: Padding(
@@ -130,9 +169,13 @@ class HomeScreen extends StatelessWidget {
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 16),
-                      _buildTransactionItem('Coffee Shop', 100, '2023-05-01'),
-                      _buildTransactionItem('Grocery Store', 250, '2023-04-28'),
-                      _buildTransactionItem('Online Retailer', 500, '2023-04-25'),
+                      if (userData?['last_20_transactions'] != null)
+                        for (var transaction in userData!['last_20_transactions'])
+                          _buildTransactionItem(
+                            transaction['company_name'],
+                            transaction['change'],
+                            transaction['date'],
+                          ),
                     ],
                   ),
                 ),
@@ -140,6 +183,9 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: const BottomNavigation(
+        initialIndex: 1,
       ),
     );
   }
@@ -154,7 +200,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTransactionItem(String store, int points, String date) {
+  Widget _buildTransactionItem(String store, String points, String date) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -168,9 +214,9 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           Text(
-            '+$points',
-            style: const TextStyle(
-              color: Colors.green,
+            points,
+            style: TextStyle(
+              color: points.startsWith('-') ? Colors.red : Colors.green,
               fontWeight: FontWeight.bold,
             ),
           ),

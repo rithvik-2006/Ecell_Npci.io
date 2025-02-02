@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widget/glassmorphic_card.dart';
+import 'package:frontend/widgets/glassmorphic_card.dart';
 
 class TransferScreen extends StatelessWidget {
   final List<Map<String, dynamic>> rewardPrograms = [
