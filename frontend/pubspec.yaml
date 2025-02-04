@@ -14,8 +14,6 @@ dependencies:
   go_router: ^14.6.1
   firebase_auth: ^5.3.3
   http: ^1.2.2
-  iconify_flutter: ^0.0.7
-  google_sign_in: ^6.2.2
   page_transition: ^2.2.1
   flutter_svg: ^2.0.17
 

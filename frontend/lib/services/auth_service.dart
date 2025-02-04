@@ -1,8 +1,6 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   String? authToken;
@@ -46,38 +44,6 @@ class AuthService {
     } catch (err) {
       log('FirebaseAuthException: $err');
       return false;
-    }
-  }
-
-  Future<String?> loginWithGoogle() async {
-    try {
-      final GoogleSignIn googleSignIn = GoogleSignIn();
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-
-      log('GOogle sign in 1 $googleUser');
-
-      if (googleUser == null) {
-        return null;
-      }
-
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      final UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-
-      final String? token = await userCredential.user?.getIdToken();
-
-      authToken = token;
-
-      return token;
-    } catch (err) {
-      log('Error during Google signing: ${(err as PlatformException).message} ${(err).details} ${(err).code} ${(err).details} ${(err).stacktrace}');
-      throw err;
-      // return null;
     }
   }
 }

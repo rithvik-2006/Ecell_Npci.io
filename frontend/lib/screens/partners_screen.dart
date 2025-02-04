@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/models/company.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:frontend/widgets/bottom_navigation.dart';
@@ -93,11 +94,11 @@ class _PartnersScreenState extends State<PartnersScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Image.network(
-            //   partner.image_path,
-            //   width: 80,
-            //   height: 80,
-            // ),
+            SvgPicture.network(
+              partner.logo_path,
+              width: 80,
+              height: 80,
+            ),
             const SizedBox(height: 16),
             Text(
               partner.name,
@@ -109,14 +110,6 @@ class _PartnersScreenState extends State<PartnersScreen> {
               partner.company_type,
               style: const TextStyle(color: Colors.grey),
               textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).primaryColor,
-              ),
-              child: const Text('View Offers'),
             ),
           ],
         ),

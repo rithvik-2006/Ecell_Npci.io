@@ -44,32 +44,6 @@ class ApiService {
     }
   }
 
-  Future<ApiResponse<Map<String, dynamic>>> googleSignIn() async {
-    String? token = await _authService.loginWithGoogle();
-
-    if (token != null) {
-      final response = await post('/customer/login', {});
-
-      if (response == null) {
-        return ApiResponse(statusCode: 500, error: 'Failed to log in user!');
-      }
-
-      final int statusCode = response['statusCode'] as int;
-      final String? errorMessage = response['body']['error'] as String?;
-
-      if (statusCode == 200) {
-        return ApiResponse<Map<String, dynamic>>(statusCode: 200);
-      } else {
-        return ApiResponse<Map<String, dynamic>>(
-            statusCode: statusCode, error: errorMessage ?? 'Failed to log in user!');
-      }
-    } else {
-      log('Error: Unable to authenticate since no token found');
-      return ApiResponse.standaloneLoginType(
-          statusCode: 401, error: 'Unable to authenticate with Google');
-    }
-  }
-
   Future<ApiResponse<Map<String, dynamic>>> authenticateRegisterAPI(
       String email, String password) async {
     try {
@@ -170,6 +144,26 @@ class ApiService {
     final Map<String, dynamic> body = response['body'] as Map<String, dynamic>;
 
     log('mssage: ${response}');
+
+    if (statusCode == 200) {
+      log('message: $body');
+      return body;
+    } else {
+      throw Exception('Failed to load user data');
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchCustomerStatistics() async {
+    final response = await post('/customer/statistics', {
+      'uid': _authService.auth.currentUser?.uid,
+    });
+
+    if (response == null) {
+      throw Exception('Failed to load user data');
+    }
+
+    final int statusCode = response['statusCode'] as int;
+    final Map<String, dynamic> body = response['body'] as Map<String, dynamic>;
 
     if (statusCode == 200) {
       log('message: $body');

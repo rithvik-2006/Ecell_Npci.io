@@ -37,6 +37,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
       case 3:
         context.go('/partners');
         break;
+      case 4:
+        context.go('/profile');
+        break;
     }
   }
 
@@ -54,6 +57,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         BottomNavigationBarItem(icon: Icon(Icons.card_giftcard), label: 'Transfer'),
         BottomNavigationBarItem(icon: Icon(Icons.redeem), label: 'Redeem'),
         BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Partners'),
+        BottomNavigationBarItem(icon: Icon(Icons.person_2_rounded), label: 'Profile'),
       ],
     );
   }

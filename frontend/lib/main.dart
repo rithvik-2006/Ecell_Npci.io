@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/screens/login_screen.dart';
 import 'package:frontend/screens/partners_screen.dart';
+import 'package:frontend/screens/profile_page.dart';
 import 'package:frontend/screens/redeem_screen.dart';
 import 'package:frontend/screens/register_screen.dart';
 import 'package:frontend/screens/transfer_screen.dart';
@@ -57,7 +58,6 @@ final GoRouter _router = GoRouter(
     routes: [
       GoRoute(
         path: '/login',
-        builder: (context, state) => const LoginScreen(),
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const LoginScreen(),
@@ -75,7 +75,6 @@ final GoRouter _router = GoRouter(
       ),
       GoRoute(
         path: '/register',
-        builder: (context, state) => const RegisterScreen(),
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const RegisterScreen(),
@@ -93,7 +92,6 @@ final GoRouter _router = GoRouter(
       ),
       GoRoute(
         path: '/home',
-        builder: (context, state) => const HomeScreen(),
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const HomeScreen(),
@@ -111,7 +109,6 @@ final GoRouter _router = GoRouter(
       ),
       GoRoute(
         path: '/partners',
-        builder: (context, state) => const PartnersScreen(),
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const PartnersScreen(),
@@ -129,7 +126,6 @@ final GoRouter _router = GoRouter(
       ),
       GoRoute(
         path: '/redeem',
-        builder: (context, state) => const RedeemScreen(),
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const RedeemScreen(),
@@ -147,7 +143,6 @@ final GoRouter _router = GoRouter(
       ),
       GoRoute(
         path: '/transfer',
-        builder: (context, state) => const TransferScreen(),
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const TransferScreen(),
@@ -163,4 +158,21 @@ final GoRouter _router = GoRouter(
           },
         ),
       ),
+      GoRoute(
+        path: '/profile',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const ProfileScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return PageTransition(
+              type: PageTransitionType.fade,
+              child: child,
+              duration: const Duration(milliseconds: 300),
+              reverseDuration: const Duration(milliseconds: 300),
+              alignment: Alignment.center,
+              childCurrent: child,
+            ).buildTransitions(context, animation, secondaryAnimation, child);
+          },
+        ),
+      )
     ]);
