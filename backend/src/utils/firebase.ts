@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import dotenv from 'dotenv';
-dotenv.config({ path: './backend/.env' });
+dotenv.config({ path: './.env' });
 
 const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON as string);
 
