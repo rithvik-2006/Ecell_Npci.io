@@ -38,7 +38,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const admin = __importStar(require("firebase-admin"));
 const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config({ path: './backend/.env' });
+dotenv_1.default.config({ path: './.env' });
 const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
