@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/widgets/bottom_navigation.dart';
 import 'package:frontend/widgets/glassmorphic_card.dart';
 import 'package:frontend/services/api_service.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -50,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const SizedBox(height: 24),
               Text(
-                'One Wallet,\nEndless Rewards',
+                'Universal\nRewards System',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -79,13 +80,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             const Text(
                               'Your Rewards Dashboard',
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 16),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text('Total Points'),
+                                const Text('Total Points: ', style: TextStyle(fontSize: 20)),
                                 Text(
                                   '${userData?['points'] ?? '0'}',
                                   style: TextStyle(
@@ -94,24 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: Theme.of(context).primaryColor,
                                   ),
                                 ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            LinearProgressIndicator(
-                              value: (userData?['progress'] ?? 0) / 100,
-                              backgroundColor: Colors.grey[800],
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).primaryColor,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                _buildPointsInfo(
-                                    'Available', '${userData?['available_points'] ?? '0'}'),
-                                _buildPointsInfo(
-                                    'Pending', '${userData?['pending_points'] ?? '0'}'),
                               ],
                             ),
                           ],
@@ -134,21 +117,27 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                context.go('/redeem');
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Theme.of(context).primaryColor,
                               ),
-                              child: const Text('Redeem Points'),
+                              child: const Text('Redeem Points',
+                                  style: TextStyle(color: Colors.white)),
                             ),
                           ),
                           const SizedBox(width: 16),
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                context.go('/transfer');
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.grey[800],
                               ),
-                              child: const Text('Transfer Points'),
+                              child: const Text('Transfer Points',
+                                  style: TextStyle(color: Colors.white)),
                             ),
                           ),
                         ],
@@ -185,18 +174,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       bottomNavigationBar: const BottomNavigation(
-        initialIndex: 1,
+        initialIndex: 0,
       ),
-    );
-  }
-
-  Widget _buildPointsInfo(String label, String points) {
-    return Column(
-      children: [
-        Text(label, style: const TextStyle(color: Colors.grey)),
-        const SizedBox(height: 4),
-        Text(points, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-      ],
     );
   }
 

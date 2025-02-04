@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/home_screen.dart';
@@ -9,6 +8,7 @@ import 'package:frontend/screens/register_screen.dart';
 import 'package:frontend/screens/transfer_screen.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:go_router/go_router.dart';
+import 'package:page_transition/page_transition.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +23,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: _router,
+      title: 'Unified Reward Systems',
+      theme: ThemeData.dark().copyWith(
+        primaryColor: const Color(0xFF00C6FF),
+        scaffoldBackgroundColor: const Color(0xFF121212),
+        cardColor: const Color(0xFF1E1E1E),
+        textTheme: ThemeData.dark().textTheme.apply(
+              fontFamily: 'Inter',
+            ),
+        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: const Color(0xFFFFD700)),
+      ),
     );
   }
 }
@@ -45,13 +55,112 @@ final GoRouter _router = GoRouter(
       }
     },
     routes: [
-      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
-      GoRoute(path: '/register', builder: (context, state) => const RegisterScreen()),
-      GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
-      GoRoute(path: '/partners', builder: (context, state) => const PartnersScreen()),
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => const LoginScreen(),
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const LoginScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return PageTransition(
+              type: PageTransitionType.fade,
+              child: child,
+              duration: const Duration(milliseconds: 300),
+              reverseDuration: const Duration(milliseconds: 300),
+              alignment: Alignment.center,
+              childCurrent: child,
+            ).buildTransitions(context, animation, secondaryAnimation, child);
+          },
+        ),
+      ),
+      GoRoute(
+        path: '/register',
+        builder: (context, state) => const RegisterScreen(),
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const RegisterScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return PageTransition(
+              type: PageTransitionType.fade,
+              child: child,
+              duration: const Duration(milliseconds: 300),
+              reverseDuration: const Duration(milliseconds: 300),
+              alignment: Alignment.center,
+              childCurrent: child,
+            ).buildTransitions(context, animation, secondaryAnimation, child);
+          },
+        ),
+      ),
+      GoRoute(
+        path: '/home',
+        builder: (context, state) => const HomeScreen(),
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const HomeScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return PageTransition(
+              type: PageTransitionType.fade,
+              child: child,
+              duration: const Duration(milliseconds: 300),
+              reverseDuration: const Duration(milliseconds: 300),
+              alignment: Alignment.center,
+              childCurrent: child,
+            ).buildTransitions(context, animation, secondaryAnimation, child);
+          },
+        ),
+      ),
+      GoRoute(
+        path: '/partners',
+        builder: (context, state) => const PartnersScreen(),
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const PartnersScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return PageTransition(
+              type: PageTransitionType.fade,
+              child: child,
+              duration: const Duration(milliseconds: 300),
+              reverseDuration: const Duration(milliseconds: 300),
+              alignment: Alignment.center,
+              childCurrent: child,
+            ).buildTransitions(context, animation, secondaryAnimation, child);
+          },
+        ),
+      ),
       GoRoute(
         path: '/redeem',
-        builder: (context, state) => RedeemScreen(),
+        builder: (context, state) => const RedeemScreen(),
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const RedeemScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return PageTransition(
+              type: PageTransitionType.fade,
+              child: child,
+              duration: const Duration(milliseconds: 300),
+              reverseDuration: const Duration(milliseconds: 300),
+              alignment: Alignment.center,
+              childCurrent: child,
+            ).buildTransitions(context, animation, secondaryAnimation, child);
+          },
+        ),
       ),
-      GoRoute(path: '/transfer', builder: (context, state) => TransferScreen()),
+      GoRoute(
+        path: '/transfer',
+        builder: (context, state) => const TransferScreen(),
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const TransferScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return PageTransition(
+              type: PageTransitionType.fade,
+              child: child,
+              duration: const Duration(milliseconds: 300),
+              reverseDuration: const Duration(milliseconds: 300),
+              alignment: Alignment.center,
+              childCurrent: child,
+            ).buildTransitions(context, animation, secondaryAnimation, child);
+          },
+        ),
+      ),
     ]);

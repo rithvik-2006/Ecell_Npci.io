@@ -16,6 +16,8 @@ dependencies:
   http: ^1.2.2
   iconify_flutter: ^0.0.7
   google_sign_in: ^6.2.2
+  page_transition: ^2.2.1
+  flutter_svg: ^2.0.17
 
 dev_dependencies:
   flutter_lints: ^4.0.0
