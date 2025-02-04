@@ -1,16 +1,24 @@
-// check mysql database and fetch balance
-const connection = require('../connectMySql');
-const admin = require('../utils/firebase');
-const express = require('express');
-const router = express.Router();
-const encryptedString = require('../encrypt');
+import express, { Request, Response } from 'express';
+import connection from '../connectMySql';
+import mysql from 'mysql';
+import admin from '../utils/firebase';
+import encryptedString from '../encrypt';
 
-router.post('/api/customer/create', async (req, res) => {
+const router = express.Router();
+
+interface CreateUserRequest extends Request {
+    body: {
+        email: string;
+        password: string;
+    };
+}
+
+router.post('/api/customer/create', async (req: CreateUserRequest, res: Response) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
         res.status(400).json({ error: 'Email and password are required' });
-        return
+        return;
     }
 
     try {
@@ -18,7 +26,7 @@ router.post('/api/customer/create', async (req, res) => {
 
         if (userRecord) {
             res.status(401).json({ error: 'User already exists' });
-            return
+            return;
         }
 
         const newUser = await admin.auth().createUser({
@@ -37,7 +45,7 @@ router.post('/api/customer/create', async (req, res) => {
             display_name: newUser.displayName || "N/A",
         };
 
-        connection.query('INSERT INTO users SET ?', newUserSQL, (err, results) => {
+        connection.query('INSERT INTO users SET ?', newUserSQL, (err: any, results: any) => {
             if (err) {
                 res.status(500).json({ error: err.message });
                 return;
@@ -52,4 +60,4 @@ router.post('/api/customer/create', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;
