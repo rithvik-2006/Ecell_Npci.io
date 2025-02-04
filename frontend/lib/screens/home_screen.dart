@@ -163,7 +163,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (userData?['last_20_transactions'] != null)
                         for (var transaction in userData!['last_20_transactions'])
                           _buildTransactionItem(
-                            // transaction['image_path'],
                             transaction['company_name'],
                             transaction['change'],
                             transaction['date'],

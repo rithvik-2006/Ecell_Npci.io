@@ -196,19 +196,38 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> fetchTransferPoints() async {
-    final response = await post('/customer/transfer', {
+    final response = await post('/customer/fetch', {
       'uid': _authService.auth.currentUser?.uid,
     });
 
     if (response == null) {
-      throw Exception('Failed to load user data');
+      throw Exception('Failed to load user data!');
     }
 
     final int statusCode = response['statusCode'] as int;
     final Map<String, dynamic> body = response['body'] as Map<String, dynamic>;
 
+    log('messagexpp: $body');
     if (statusCode == 200) {
-      log('messagexpp: $body');
+      return body;
+    } else {
+      throw Exception('Failed to load user data');
+    }
+  }
+
+  Future<Map<String, dynamic>> depositPoints(String partnerName, String credit) async {
+    final response = await post('/customer/credit',
+        {'uid': _authService.auth.currentUser?.uid, "partner_name": partnerName, "credit": credit});
+
+    if (response == null) {
+      throw Exception('Failed to load user data!');
+    }
+
+    final int statusCode = response['statusCode'] as int;
+    final Map<String, dynamic> body = response['body'] as Map<String, dynamic>;
+
+    log('messaghjafse: $body');
+    if (statusCode == 200) {
       return body;
     } else {
       throw Exception('Failed to load user data');

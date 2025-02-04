@@ -16,14 +16,16 @@ class _TransferScreenState extends State<TransferScreen> {
   List<dynamic>? filteredPartners;
   bool isLoading = true;
   String? selectedPartner;
+  bool isTransferring = false;
+  String? partnerName;
 
   @override
   void initState() {
     super.initState();
-    fetchRedeemData();
+    fetchTransferData();
   }
 
-  Future<void> fetchRedeemData() async {
+  Future<void> fetchTransferData() async {
     setState(() {
       isLoading = true;
     });
@@ -32,15 +34,15 @@ class _TransferScreenState extends State<TransferScreen> {
       final data = await ApiService().fetchTransferPoints();
       setState(() {
         transferData = data;
-        filteredPartners = data['partners'];
-        selectedPartner = data['partners']?.first['name'];
+        filteredPartners = data['companies'];
+        selectedPartner = data['companies']?.first['name'];
         isLoading = false;
       });
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      throw Exception('Failed to load redeem data');
+      throw Exception('Failed to load transfer data. Error: $e');
     }
   }
 
@@ -52,93 +54,6 @@ class _TransferScreenState extends State<TransferScreen> {
   @override
   void dispose() {
     super.dispose();
-  }
-
-  void _showTransferModal(BuildContext context, String partnerName) {
-    TextEditingController transferController = TextEditingController();
-    bool isTransferring = false;
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.black87,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return Padding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-                left: 16,
-                right: 16,
-                top: 16,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Transfer Points to $partnerName',
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: transferController,
-                    decoration: const InputDecoration(
-                      labelText: 'Input value',
-                      labelStyle: TextStyle(color: Colors.white),
-                      border: OutlineInputBorder(),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                    ),
-                    keyboardType: TextInputType.number,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  const SizedBox(height: 16),
-                  isTransferring
-                      ? const CircularProgressIndicator()
-                      : ElevatedButton(
-                          onPressed: () async {
-                            setState(() {
-                              isTransferring = true;
-                            });
-                            final double points = double.tryParse(transferController.text) ?? 0.0;
-                            try {
-                              await ApiService().transferPoints(partnerName, points);
-                              Navigator.pop(context);
-                              fetchRedeemData();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Points transferred successfully. Your reward points will be redeemed within 24 hours.')),
-                              );
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content: Text('Failed to transfer points: ${e.toString()}')),
-                              );
-                            } finally {
-                              setState(() {
-                                isTransferring = false;
-                              });
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor,
-                          ),
-                          child: const Text('Redeem', style: TextStyle(color: Colors.white)),
-                        ),
-                  const SizedBox(height: 16),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
   }
 
   @override
@@ -200,7 +115,7 @@ class _TransferScreenState extends State<TransferScreen> {
                     style: const TextStyle(color: Colors.white),
                     onChanged: (query) {
                       setState(() {
-                        filteredPartners = transferData?['partners']
+                        filteredPartners = transferData?['companies']
                             ?.where((partner) => (partner['name'] as String)
                                 .toLowerCase()
                                 .startsWith(query.toLowerCase()))
@@ -254,23 +169,55 @@ class _TransferScreenState extends State<TransferScreen> {
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      '${program['normalised_points']} points',
+                      '${program['points']} points',
                       style: const TextStyle(color: Colors.grey),
                     ),
                   ],
                 ),
               ),
               TextButton(
-                onPressed: () {
-                  _showTransferModal(context, program['name']);
-                },
+                onPressed: isTransferring
+                    ? null
+                    : () async {
+                        setState(() {
+                          isTransferring = true;
+                        });
+
+                        try {
+                          await ApiService()
+                              .depositPoints(program['name'], program['points'].toString());
+                          fetchTransferData();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text(
+                                    'Points deposited successfully. Your reward points will be displayed within 24 hours.')),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Failed to deposit points: ${e.toString()}')),
+                          );
+                        } finally {
+                          setState(() {
+                            isTransferring = false;
+                          });
+                        }
+                      },
                 style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).primaryColor,
                 ),
-                child: const Text(
-                  'Redeem',
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: isTransferring
+                    ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text(
+                        'Deposit',
+                        style: TextStyle(color: Colors.white),
+                      ),
               ),
             ],
           ),
