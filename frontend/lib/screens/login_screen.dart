@@ -81,7 +81,7 @@ class LoginScreenState extends State<LoginScreen> {
                       TextField(
                         controller: _emailController,
                         decoration: const InputDecoration(
-                          hintText: 'aloneclone@aloneclone.com',
+                          hintText: 'youremail@email.com',
                           hintStyle: TextStyle(
                             color: Colors.grey,
                           ),
@@ -147,11 +147,19 @@ class LoginScreenState extends State<LoginScreen> {
                                   ),
                                 );
                               } else if (response.statusCode == 200) {
-                                context.go('/home');
+                                bool isSeller = _emailController.text.endsWith('@urs.com');
+
+                                if (isSeller) {
+                                  context.go('/seller-home');
+                                } else {
+                                  context.go('/home');
+                                }
+
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Login successful'),
-                                    backgroundColor: Color.fromARGB(255, 49, 153, 31),
+                                  SnackBar(
+                                    content:
+                                        Text('Login successful ${isSeller ? 'as seller' : ''}'),
+                                    backgroundColor: const Color.fromARGB(255, 49, 153, 31),
                                   ),
                                 );
                               }

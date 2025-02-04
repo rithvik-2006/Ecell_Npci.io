@@ -33,10 +33,12 @@ class _HomeScreenState extends State<HomeScreen> {
         isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      throw Exception('Failed to load user data');
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+      throw Exception('Failed to load user data. Error: $e');
     }
   }
 
@@ -161,6 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (userData?['last_20_transactions'] != null)
                         for (var transaction in userData!['last_20_transactions'])
                           _buildTransactionItem(
+                            // transaction['image_path'],
                             transaction['company_name'],
                             transaction['change'],
                             transaction['date'],
@@ -185,11 +188,27 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
             children: [
-              Text(store, style: const TextStyle(fontWeight: FontWeight.bold)),
-              Text(date, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+              // CircleAvatar(
+              //   backgroundColor: Colors.grey[300],
+              //   child: ClipOval(
+              //     child: SvgPicture.asset(
+              //       image,
+              //       width: 40,
+              //       height: 40,
+              //       fit: BoxFit.cover,
+              //     ),
+              //   ),
+              // ),
+              const SizedBox(width: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(store, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text(date, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                ],
+              ),
             ],
           ),
           Text(

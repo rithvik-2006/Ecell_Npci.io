@@ -13,6 +13,7 @@ class RedeemScreen extends StatefulWidget {
 
 class _RedeemScreenState extends State<RedeemScreen> {
   Map<String, dynamic>? redeemData;
+  List<dynamic>? filteredPartners;
   bool isLoading = true;
   String? selectedPartner;
   TextEditingController inputController = TextEditingController();
@@ -33,6 +34,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
       final data = await ApiService().fetchOffers();
       setState(() {
         redeemData = data;
+        filteredPartners = data['partners'];
         selectedPartner = data['partners']?.first['name'];
         isLoading = false;
       });
@@ -204,9 +206,25 @@ class _RedeemScreenState extends State<RedeemScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  ...?redeemData?['partners']
-                      ?.map((program) => _buildRewardProgramCard(context, program))
-                      .toList(),
+                  TextField(
+                    decoration: const InputDecoration(
+                      labelText: 'Search Partners',
+                      labelStyle: TextStyle(color: Colors.white),
+                      border: OutlineInputBorder(),
+                    ),
+                    style: const TextStyle(color: Colors.white),
+                    onChanged: (query) {
+                      setState(() {
+                        filteredPartners = redeemData?['partners']
+                            ?.where((partner) => (partner['name'] as String)
+                                .toLowerCase()
+                                .startsWith(query.toLowerCase()))
+                            .toList();
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  ...?filteredPartners?.map((program) => _buildRewardProgramCard(context, program)),
                   const SizedBox(height: 24),
                   GlassmorphicCard(
                     child: Padding(

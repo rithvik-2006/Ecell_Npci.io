@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/home_screen.dart';
@@ -6,6 +7,7 @@ import 'package:frontend/screens/partners_screen.dart';
 import 'package:frontend/screens/profile_screen.dart';
 import 'package:frontend/screens/redeem_screen.dart';
 import 'package:frontend/screens/register_screen.dart';
+import 'package:frontend/screens/seller_home_screen.dart';
 import 'package:frontend/screens/transfer_screen.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:go_router/go_router.dart';
@@ -43,14 +45,14 @@ final GoRouter _router = GoRouter(
     redirect: (context, state) async {
       AuthService authService = AuthService();
       bool isLoggedIn = await authService.checkLoggedInUser();
+      bool isSeller = FirebaseAuth.instance.currentUser?.email?.endsWith('@urs.com') ?? false;
 
-      // final user = FirebaseAuth.instance.currentUser;
       final isAuthPath = state.uri.path == '/login' || state.uri.path == '/register';
 
       if (!isLoggedIn && !isAuthPath) {
         return '/login';
       } else if (isLoggedIn && isAuthPath) {
-        return '/home';
+        return isSeller ? '/seller-home' : '/home';
       } else {
         return state.uri.path;
       }
@@ -174,5 +176,21 @@ final GoRouter _router = GoRouter(
             ).buildTransitions(context, animation, secondaryAnimation, child);
           },
         ),
-      )
+      ),
+      GoRoute(
+          path: '/seller-home',
+          pageBuilder: (context, state) => CustomTransitionPage(
+                key: state.pageKey,
+                child: const SellerHomeScreen(),
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  return PageTransition(
+                    type: PageTransitionType.fade,
+                    child: child,
+                    duration: const Duration(milliseconds: 300),
+                    reverseDuration: const Duration(milliseconds: 300),
+                    alignment: Alignment.center,
+                    childCurrent: child,
+                  ).buildTransitions(context, animation, secondaryAnimation, child);
+                },
+              ))
     ]);

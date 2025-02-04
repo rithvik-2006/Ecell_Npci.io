@@ -34,9 +34,11 @@ class _PartnersScreenState extends State<PartnersScreen> {
         isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
       throw Exception('Failed to load partners. Error: $e');
     }
   }

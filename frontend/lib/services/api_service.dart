@@ -7,7 +7,7 @@ import 'package:frontend/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseURL = 'https://tqrxxx81-3004.inc1.devtunnels.ms/api';
+  final String baseURL = 'https://tqrxxx81-3005.inc1.devtunnels.ms/api';
   final AuthService _authService = AuthService();
 
   Future<Map<String, dynamic>?> post(String endpoint, dynamic body) async {
@@ -20,7 +20,7 @@ class ApiService {
           },
           body: json.encode(body));
 
-      log('Response: $response');
+      log('Responsex: ${response.body}');
 
       return {
         'statusCode': response.statusCode,
@@ -97,7 +97,7 @@ class ApiService {
     });
 
     if (response == null) {
-      throw Exception('Failed to load user data');
+      throw Exception('Failed to load user data.');
     }
 
     final int statusCode = response['statusCode'] as int;
@@ -169,6 +169,46 @@ class ApiService {
 
     if (statusCode == 200) {
       log('message: $body');
+      return body;
+    } else {
+      throw Exception('Failed to load user data');
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchSeller() async {
+    final response = await post('/seller', {
+      'uid': _authService.auth.currentUser?.uid,
+    });
+
+    if (response == null) {
+      throw Exception('Failed to load user data!');
+    }
+
+    final int statusCode = response['statusCode'] as int;
+    final Map<String, dynamic> body = response['body'] as Map<String, dynamic>;
+
+    if (statusCode == 200) {
+      log('messagesxb: $body');
+      return body;
+    } else {
+      throw Exception('Failed to load user data. Error: ${body['error']}');
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchTransferPoints() async {
+    final response = await post('/customer/transfer', {
+      'uid': _authService.auth.currentUser?.uid,
+    });
+
+    if (response == null) {
+      throw Exception('Failed to load user data');
+    }
+
+    final int statusCode = response['statusCode'] as int;
+    final Map<String, dynamic> body = response['body'] as Map<String, dynamic>;
+
+    if (statusCode == 200) {
+      log('messagexpp: $body');
       return body;
     } else {
       throw Exception('Failed to load user data');

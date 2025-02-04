@@ -82,7 +82,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                       TextField(
                         controller: _emailController,
                         decoration: InputDecoration(
-                          hintText: 'aloneclone@aloneclone.com',
+                          hintText: 'youremail@email.com',
                           hintStyle: const TextStyle(
                             color: Colors.grey,
                           ),
@@ -174,6 +174,16 @@ class RegisterScreenState extends State<RegisterScreen> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Passwords do not match.'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
+
+                            if (_emailController.text.endsWith('@urs.com')) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Please use a valid email address.'),
                                   backgroundColor: Colors.red,
                                 ),
                               );

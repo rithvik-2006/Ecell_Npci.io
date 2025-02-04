@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:typed_data';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/bottom_navigation.dart';
@@ -15,7 +18,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   User? _user;
   bool _isLoadingRewards = true;
-  Map<String, dynamic>? _rewardsData;
+  Map<String, dynamic>? _backendUserData;
 
   @override
   void initState() {
@@ -44,14 +47,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       final data = await ApiService().fetchCustomerStatistics();
       setState(() {
-        _rewardsData = data;
+        _backendUserData = data;
         _isLoadingRewards = false;
       });
+
+      log('messagep: ${_backendUserData?['chart']['data']}');
     } catch (e) {
       _showErrorSnackbar('Failed to fetch rewards data: $e');
-      setState(() {
-        _isLoadingRewards = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoadingRewards = false;
+        });
+      }
     }
   }
 
@@ -64,10 +71,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void _showErrorSnackbar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    }
   }
 
   @override
@@ -108,6 +122,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _logout,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).primaryColor,
+                minimumSize: const Size(double.infinity, 50),
+              ),
+              child: const Text(
+                'Logout',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+            ),
+            const SizedBox(height: 24),
             GlassmorphicCard(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -120,7 +146,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     const SizedBox(height: 16),
                     _buildInfoRow('Email', _user?.email ?? 'john.doe@example.com'),
-                    _buildInfoRow('Member Since', 'January 1, 2023'),
+                    _buildInfoRow('Member Since',
+                        _backendUserData?['created_at'].toString().split('T')[0] ?? '2021-01-01'),
                   ],
                 ),
               ),
@@ -139,15 +166,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 16),
                     if (_isLoadingRewards)
                       const Center(child: CircularProgressIndicator())
-                    else if (_rewardsData != null)
+                    else if (_backendUserData != null)
                       Column(
                         children: [
                           _buildRewardRow(
-                              'Total Points', _rewardsData!['totalPoints'].toString(), context),
-                          _buildRewardRow('Points Redeemed',
-                              _rewardsData!['pointsRedeemed'].toString(), context),
-                          _buildRewardRow('Current Balance',
-                              _rewardsData!['currentBalance'].toString(), context),
+                              'Total Points', '${_backendUserData?['points']} URT', context),
+                          const SizedBox(height: 16),
+                          Image.memory(
+                            Uint8List.fromList(
+                                List<int>.from(_backendUserData?['chart']['data'] ?? [])),
+                            height: 200,
+                            width: 200,
+                          )
                         ],
                       )
                     else
@@ -157,17 +187,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _logout,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).primaryColor,
-                minimumSize: const Size(double.infinity, 50),
-              ),
-              child: const Text(
-                'Logout',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-            ),
           ],
         ),
       ),
