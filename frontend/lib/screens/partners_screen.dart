@@ -37,7 +37,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
       setState(() {
         isLoading = false;
       });
-      throw Exception('Failed to load partners');
+      throw Exception('Failed to load partners. Error: $e');
     }
   }
 
@@ -95,7 +95,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.network(
-              partner.logo_path,
+              partner.image_path,
               width: 80,
               height: 80,
             ),

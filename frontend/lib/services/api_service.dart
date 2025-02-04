@@ -7,7 +7,7 @@ import 'package:frontend/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseURL = 'https://tqrxxx81-3003.inc1.devtunnels.ms/api';
+  final String baseURL = 'https://tqrxxx81-3004.inc1.devtunnels.ms/api';
   final AuthService _authService = AuthService();
 
   Future<Map<String, dynamic>?> post(String endpoint, dynamic body) async {
@@ -80,6 +80,8 @@ class ApiService {
 
   Future<List<Company>> fetchCompanies() async {
     final response = await http.get(Uri.parse('$baseURL/companies'));
+
+    log('Response: ${response.body}');
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);

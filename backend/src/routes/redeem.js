@@ -45,7 +45,7 @@ router.post('/api/customer/redeem', (req, res) => {
                 let mult =  parseFloat(( company.scaling_constant * company.monthly_sales / company.points_earned).toFixed(2))
                 let temp = {
                     name: company.name,
-                    logo_path: company.image_path,
+                    image_path: company.image_path,
                     normalised_points: parseFloat((returnObj.points * mult).toFixed(2)),
                     multiplier: mult
                 }

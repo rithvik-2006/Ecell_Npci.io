@@ -292,7 +292,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
                 ),
                 child: ClipOval(
                   child: SvgPicture.network(
-                    program['logo_path'],
+                    program['image_path'],
                     fit: BoxFit.fitWidth,
                     width: 48,
                     height: 48,

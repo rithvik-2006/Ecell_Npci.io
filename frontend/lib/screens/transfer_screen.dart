@@ -194,7 +194,7 @@ class _TransferScreenState extends State<TransferScreen> {
                 ),
                 child: ClipOval(
                   child: SvgPicture.network(
-                    program['logo_path'],
+                    program['image_path'],
                     fit: BoxFit.fitWidth,
                     width: 48,
                     height: 48,

@@ -6,7 +6,7 @@ class Company {
   String scaling_constant;
   String created_at;
   String updated_at;
-  String logo_path;
+  String image_path;
   String company_type;
   String name;
 
@@ -18,7 +18,7 @@ class Company {
     required this.scaling_constant,
     required this.created_at,
     required this.updated_at,
-    required this.logo_path,
+    required this.image_path,
     required this.company_type,
     required this.name,
   });
@@ -32,7 +32,7 @@ class Company {
       scaling_constant: json['scaling_constant'],
       created_at: json['created_at'],
       updated_at: json['updated_at'],
-      logo_path: json['logo_path'],
+      image_path: json['image_path'],
       company_type: json['company_type'],
       name: json['name'],
     );

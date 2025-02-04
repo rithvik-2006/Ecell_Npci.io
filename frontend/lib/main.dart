@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/screens/login_screen.dart';
 import 'package:frontend/screens/partners_screen.dart';
-import 'package:frontend/screens/profile_page.dart';
+import 'package:frontend/screens/profile_screen.dart';
 import 'package:frontend/screens/redeem_screen.dart';
 import 'package:frontend/screens/register_screen.dart';
 import 'package:frontend/screens/transfer_screen.dart';
