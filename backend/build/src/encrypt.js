@@ -47,7 +47,6 @@ const crypto = __importStar(require("crypto"));
 function encryptString(plainText) {
     return __awaiter(this, void 0, void 0, function* () {
         const saltRounds = 10;
-        const fixedSalt = 'urs_very_cool_salt';
         const hash = crypto.createHash('sha256').update(plainText).digest('hex');
         const salt = bcrypt.genSaltSync(saltRounds);
         const encryptedString = yield bcrypt.hash(hash, salt);

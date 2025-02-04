@@ -27,7 +27,7 @@ app.use('/', stats_1.default);
 app.use('/', transfer_1.default);
 app.use('/', seller_1.default);
 app.use('/', convert_1.default);
-app.use("/", credit_1.default);
+app.use('/', credit_1.default);
 app.listen(3006, () => {
     console.log('Server is running on http://localhost:3006');
 });

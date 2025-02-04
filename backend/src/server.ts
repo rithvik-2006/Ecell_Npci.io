@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response } from 'express';
 const app = express();
 
 app.use(express.json());
@@ -7,25 +7,25 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Hello World');
 });
 
-import router from './routes/companies';
-import router2 from './routes/createUser';
-import router3 from './routes/info';
-import router4 from './routes/redeem';
-import router5 from './routes/stats';
-import router6 from './routes/transfer';
-import router7 from './routes/seller';
-import router8 from './routes/convert';
-import router9 from './routes/credit'; 
+import companiesRouter from './routes/companies';
+import createUserRouter from './routes/createUser';
+import infoRouter from './routes/info';
+import redeemRouter from './routes/redeem';
+import statsRouter from './routes/stats';
+import transferRouter from './routes/transfer';
+import sellerRouter from './routes/seller';
+import convertRouter from './routes/convert';
+import creditRouter from './routes/credit'; 
 
-app.use('/', router);
-app.use('/', router2);
-app.use('/', router3);
-app.use('/', router4);
-app.use('/', router5);
-app.use('/', router6);
-app.use('/', router7);
-app.use('/', router8);
-app.use("/", router9);
+app.use('/', companiesRouter);
+app.use('/', createUserRouter);
+app.use('/', infoRouter);
+app.use('/', redeemRouter);
+app.use('/', statsRouter);
+app.use('/', transferRouter);
+app.use('/', sellerRouter);
+app.use('/', convertRouter);
+app.use('/', creditRouter);
 
 
 app.listen(3006, () => {

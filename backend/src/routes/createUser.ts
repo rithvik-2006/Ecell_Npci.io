@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import connection from '../connectMySql';
-import mysql from 'mysql';
 import admin from '../utils/firebase';
 import encryptedString from '../encrypt';
 

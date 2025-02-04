@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import { Connection } from 'mysql';
 
 const router = express.Router();
 import connection from '../connectMySql';

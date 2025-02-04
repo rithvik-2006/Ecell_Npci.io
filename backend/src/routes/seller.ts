@@ -1,8 +1,6 @@
 import express, { json } from 'express';
 import { Request, Response } from 'express';
 import connection from '../connectMySql';
-import { connect } from 'mongoose';
-
 const router = express.Router();
 
 router.post('/api/seller', async (req: Request, res: Response) => {

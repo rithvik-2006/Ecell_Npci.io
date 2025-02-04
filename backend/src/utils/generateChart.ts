@@ -1,5 +1,4 @@
 import ChartJsImage from 'chartjs-to-image';
-import { sanitizeFilter } from 'mongoose';
 
 interface FrequencyData {
     [key: string]: number;

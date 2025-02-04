@@ -1,11 +1,10 @@
 import express, { Request, Response } from 'express';
-import { Connection, MysqlError } from 'mysql';
 import connection from '../connectMySql';
 
 const router = express.Router();
 
 router.get('/api/companies', (req: Request, res: Response) => {
-    connection.query('SELECT * FROM companies', (err: MysqlError | null, rows: any[]) => {
+    connection.query('SELECT * FROM companies', (err: any, rows: any[]) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;

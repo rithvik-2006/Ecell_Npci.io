@@ -1,5 +1,4 @@
 import express, { Request, Response } from "express";
-import { Connection } from "mysql";
 import makeChart from "../utils/generateChart";
 
 const router = express.Router();
