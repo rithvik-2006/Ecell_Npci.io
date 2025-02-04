@@ -1,0 +1,21 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "npci-ecell",
+          "appId": "1:337099447718:android:28c2f384955c9144978367",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "npci-ecell",
+          "configurations": {
+            "android": "1:337099447718:android:28c2f384955c9144978367"
+          }
+        }
+      }
+    }
+  }
+}

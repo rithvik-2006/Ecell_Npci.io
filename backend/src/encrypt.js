@@ -1,14 +1,11 @@
 const bcrypt = require('bcrypt');
-const saltRounds = 10;
-const encrypt = (input) => {
-    return new Promise((resolve, reject) => {
-        bcrypt.hash(input, saltRounds, (err, hash) => {
-            if (err) {
-                reject(err);
-            }
-            resolve(hash);
-        });
-    });
-};
+const crypto = require('crypto');
 
-module.exports = encrypt;
+async function encryptString(plainText) {
+    const saltRounds = 10;
+    const hash = crypto.createHash('sha256').update(plainText).digest('hex');
+    const encryptedString = await bcrypt.hash(hash, saltRounds);
+    return encryptedString;
+}
+
+module.exports = encryptString;
