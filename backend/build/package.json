@@ -1,0 +1,21 @@
+{
+    "name": "ecell_npci",
+    "version": "1.0.0",
+    "main": "./src/server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsc "
+    },
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "bcrypt": "^5.1.1",
+        "dotenv": "^16.4.7",
+        "firebase-admin": "^13.0.2",
+        "mysql2": "^3.12.0"
+    },
+    "devDependencies": {
+        "@types/bcrypt": "^5.0.2"
+    }
+}
